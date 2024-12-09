@@ -2,15 +2,18 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./helpers/swaggerConfig.js');
+
 
 const contactsRouter = require("./routes/contactsRouter.js");
-
+const UserRoutes = require("./routes/userRoutes.js")
 
 const dotenv = require('dotenv');
 dotenv.config({ path: './.env' });
 const app = express();
 
-
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
   mongoose.connect(process.env.MONGO_URL,)
   
   .then(() => {
@@ -18,10 +21,14 @@ const app = express();
     console.log("Database connection successful");
 
     app.use(morgan("tiny"));
-    app.use(cors());
+    app.use(cors({
+      origin: 'http://localhost:3001', // Замість * вказуємо точний домен
+      credentials: true, // Дозволяємо креденціали (cookies, токени)
+    }));
     app.use(express.json());
 
-    app.use("/api/contacts", contactsRouter);
+    app.use("/api/task", contactsRouter);
+    app.use("/api/auth", UserRoutes);
 
     app.use((_, res) => {
       res.status(404).json({ message: "Route not found" });

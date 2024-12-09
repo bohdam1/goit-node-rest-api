@@ -1,12 +1,13 @@
 
-const { listContacts,getContactById,removeContact,addContact,} = require('../services/contactsServices');
-const Contact = require("../schemas/contacts")
+
+const Task = require("../schemas/taskSchems")
 
 
-const getAllContacts = async (req, res, next) => {
-  const contacts = await Contact.find({})
-  if (contacts) {
-    res.status(200).json( contacts )
+const getAllTask = async (req, res, next) => {
+  const {_id:owner} = req.user
+  const task = await Task.find({owner})
+  if (task) {
+    res.status(200).json( task )
 
   } else {
     res.status(404).json({ status: "Not Found" })
@@ -15,24 +16,24 @@ const getAllContacts = async (req, res, next) => {
 };
 
 
-const getOneContact = async (req, res) => {
+const getOneTask = async (req, res) => {
     
   const id = req.params.id;
-  const contact =  await Contact.findOne({ _id: id });
-  if (contact) {
-    res.json(contact);
+  const task =  await Task.findOne({ _id: id });
+  if (task) {
+    res.json(task);
   } else {
     res.status(404).json({ message: 'Контакт не знайдений' });
   }
     
 };
 
-const deleteContact = async (req, res) => {
+const deleteTask = async (req, res) => {
   const id = req.params.id;
-  const contactdelete = await Contact.findByIdAndDelete({ _id: id }); 
+  const tasktdelete = await Task.findByIdAndDelete({ _id: id }); 
 
-    if (contactdelete) {
-      res.json({ message: 'Контакт успішно видалено', contactdelete });
+    if (tasktdelete) {
+      res.json({ message: 'Контакт успішно видалено', tasktdelete });
     } else {
       res.status(404).json({ message: 'Контакт не знайдений' });
     }
@@ -40,27 +41,28 @@ const deleteContact = async (req, res) => {
 };
 
 
-const createContact = async (req, res) => {
-    const { name, email, phone,favorite } = req.body;  
-    const NewContact = await Contact.create({ name, email, phone,favorite });
+const createTask = async (req, res) => {
+    const {_id:owner} = req.user
+    const { taskName, description, endTime,timeToSpend } = req.body;  
+    const NewTask = await Task.create({ taskName, description, endTime,timeToSpend,owner });
     
-    if (NewContact) {
-      res.json({ message: 'Контакт успішно ствоерно', NewContact });
+    if (NewTask) {
+      res.json({ message: 'Контакт успішно ствоерно', NewTask });
     } else {
       res.status(404).json({ message: 'Помилка при створенні контакту' });
     }
     
   };
-  const updateContact = async (req, res) => {
+  const updateTask = async (req, res) => {
     const { id } = req.params;
   
     try {
     
-      const updatedContact = await Contact.findByIdAndUpdate(id, req.body, { new: true });
-      if (!updatedContact) {
+      const updatedTask = await Task.findByIdAndUpdate(id, req.body, { new: true });
+      if (!updatedTask) {
         return res.status(404).json({ message: "Contact not found" });
       }
-      res.status(200).json(updatedContact);
+      res.status(200).json(updatedTask);
     } catch (err) {
      
       res.status(500).json({ message: "An error occurred while updating the contact" });
@@ -73,11 +75,11 @@ const createContact = async (req, res) => {
   
     try {
     
-      const updatedContact = await Contact.findByIdAndUpdate(id, req.body, { new: true });
-      if (!updatedContact) {
+      const updatedTask = await Task.findByIdAndUpdate(id, req.body, { new: true });
+      if (!updatedTask) {
         return res.status(404).json({ message: "Contact not found" });
       }
-      res.status(200).json(updatedContact);
+      res.status(200).json(updatedTask);
     } catch (err) {
      
       res.status(500).json({ message: "An error occurred while updating the contact" });
@@ -85,10 +87,10 @@ const createContact = async (req, res) => {
   }
 
 module.exports = {
-    getAllContacts,
-    getOneContact,
-    deleteContact,
-    createContact,
-    updateContact,
+    getAllTask,
+    getOneTask,
+    deleteTask,
+    createTask,
+    updateTask,
     updateFavorites
 };

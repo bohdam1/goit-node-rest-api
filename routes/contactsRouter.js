@@ -1,26 +1,27 @@
 const express = require("express");
 const {
-  getAllContacts,
-  getOneContact,
-  deleteContact,
-  createContact,
-  updateContact,
+  getAllTask,
+  getOneTask,
+  deleteTask,
+  createTask,
+  updateTask,
   updateFavorites
-} = require("../controllers/contactsControllers.js");
+} = require("../controllers/contactsControllers");
+const athenticate = require("../middlewares/athenticate");
 
 
 const contactsRouter = express.Router();
 
-contactsRouter.get("/", getAllContacts);
+contactsRouter.get("/",athenticate, getAllTask);
 
-contactsRouter.get("/:id", getOneContact);
+contactsRouter.get("/:id",athenticate,getOneTask );
 
-contactsRouter.delete("/:id", deleteContact);
+contactsRouter.delete("/:id",athenticate, deleteTask);
 
-contactsRouter.post("/", createContact);
+contactsRouter.post("/",athenticate, createTask);
 
-contactsRouter.put("/:id", updateContact);
+contactsRouter.put("/:id",athenticate, updateTask);
 
-contactsRouter.patch("/:id/favorite", updateFavorites);
+contactsRouter.patch("/:id/favorite",athenticate, updateFavorites);
 
 module.exports = contactsRouter;
