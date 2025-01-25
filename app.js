@@ -2,8 +2,6 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const swaggerUi = require('swagger-ui-express');
-const swaggerSpec = require('./helpers/swaggerConfig.js');
 
 
 const contactsRouter = require("./routes/contactsRouter.js");
@@ -13,7 +11,7 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './.env' });
 const app = express();
 
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  
   mongoose.connect(process.env.MONGO_URL,)
   
   .then(() => {
@@ -22,10 +20,11 @@ const app = express();
 
     app.use(morgan("tiny"));
     app.use(cors({
-      origin: 'http://localhost:3001', // Замість * вказуємо точний домен
-      credentials: true, // Дозволяємо креденціали (cookies, токени)
+      origin: 'http://localhost:3001', 
+      credentials: true,
     }));
     app.use(express.json());
+    app.use(express.static("public"))
 
     app.use("/api/task", contactsRouter);
     app.use("/api/auth", UserRoutes);

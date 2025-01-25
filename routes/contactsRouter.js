@@ -22,6 +22,6 @@ contactsRouter.post("/",athenticate, createTask);
 
 contactsRouter.put("/:id",athenticate, updateTask);
 
-contactsRouter.patch("/:id/favorite",athenticate, updateFavorites);
+contactsRouter.patch("/:id/done",athenticate, updateFavorites);
 
 module.exports = contactsRouter;

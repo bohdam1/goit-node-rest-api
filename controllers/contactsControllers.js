@@ -47,7 +47,7 @@ const createTask = async (req, res) => {
     const NewTask = await Task.create({ taskName, description, endTime,timeToSpend,owner });
     
     if (NewTask) {
-      res.json({ message: 'Контакт успішно ствоерно', NewTask });
+      res.json(NewTask);
     } else {
       res.status(404).json({ message: 'Помилка при створенні контакту' });
     }
@@ -74,17 +74,26 @@ const createTask = async (req, res) => {
     const { id } = req.params;
   
     try {
-    
-      const updatedTask = await Task.findByIdAndUpdate(id, req.body, { new: true });
+      // Оновлюємо поле `done` на true
+      const updatedTask = await Task.findByIdAndUpdate(
+        id,
+        { done: true }, // Оновлення тільки поля `done`
+        { new: true } // Повертаємо оновлений документ
+      );
+  
+      // Якщо завдання не знайдено
       if (!updatedTask) {
-        return res.status(404).json({ message: "Contact not found" });
+        return res.status(404).json({ message: "Task not found" });
       }
+  
+      // Повертаємо оновлене завдання
       res.status(200).json(updatedTask);
     } catch (err) {
-     
-      res.status(500).json({ message: "An error occurred while updating the contact" });
+      // Обробка помилки
+      res.status(500).json({ message: "An error occurred while updating the task" });
     }
-  }
+  };
+  
 
 module.exports = {
     getAllTask,
