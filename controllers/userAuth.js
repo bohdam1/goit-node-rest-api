@@ -36,9 +36,9 @@ const login = async (req, res) => {
          message: "Пошта або пароль невірні", 
     });
  }   
- const token = jwt.sign({id: user._id},process.env.SECRET_KEY,{expiresIn: "24h"})
+ const token = jwt.sign({id: user._id},process.env.SECRET_KEY,{expiresIn: "30d"})
 
- res.json({token})
+ res.json({token,user})
 
 }
 

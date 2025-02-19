@@ -30,3 +30,6 @@ const athenticate = async (req, res, next) => {
 };
 
 module.exports = athenticate;
+
+
+

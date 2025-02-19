@@ -38,8 +38,12 @@ const TaskSchema = new mongoose.Schema(
       type: Boolean,
       default: false, // Automatically set to false by default
     },
+    createdAt: {
+      type: Date,
+      default: Date.now, // Автоматично встановлює поточний час при створенні
+    },
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: false } // timestamps: false, бо createdAt явно додається
 );
 
 // Create Mongoose model

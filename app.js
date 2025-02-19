@@ -20,7 +20,7 @@ const app = express();
 
     app.use(morgan("tiny"));
     app.use(cors({
-      origin: 'http://localhost:3001', 
+      origin: 'http://192.168.0.106:3001', 
       credentials: true,
     }));
     app.use(express.json());
