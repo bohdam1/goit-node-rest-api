@@ -86,17 +86,17 @@ const changePassword = async (req, res) => {
     }
   };
   
-// Контролер для видалення акаунта
+
 const deleteAccount = async (req, res) => {
   try {
     const { userId } = req.body;
 
-    // Перевірка наявності userId
+    
     if (!userId) {
       return res.status(400).json({ message: "ID користувача обов'язковий" });
     }
 
-    // Видаляємо користувача з бази даних
+    
     const user = await User.findByIdAndDelete(userId);
 
     if (!user) {
